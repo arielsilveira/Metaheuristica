@@ -97,9 +97,9 @@ func InitializeMatrix(n int) [][]float64 {
 		for j := i + 1; j < n; j++ {
 			go func(w *sync.WaitGroup, matrix [][]float64, i int, j int) {
 
-				valueX := float64(vetX[i] - vetX[j])
-				valueY := float64(vetY[i] - vetY[j])
-				matrix[i][j] = math.Sqrt(math.Pow(valueX, 2) + math.Pow(valueY, 2))
+				valueX := math.Pow(float64(vetX[i]-vetX[j]), 2)
+				valueY := math.Pow(float64(vetY[i]-vetY[j]), 2)
+				matrix[i][j] = math.Sqrt(valueX + valueY)
 				matrix[j][i] = matrix[i][j]
 				w.Done()
 			}(&wg, matrix, i, j)
@@ -147,18 +147,34 @@ func printRoute(s []int) {
 }
 
 func PrintInfos(s []int, distance [][]float64) {
-	fo := calculateOF(s, distance)
+	fo := CalculateOF(s, distance)
 
 	fmt.Println("Solucao obtida usando a estrategia Best Improvement do Metodo da Descida:")
 	printRoute(s)
 	fmt.Println("Função objetivo = ", fo)
 }
 
-func calculateOF(s []int, distance [][]float64) float64 {
+func CalculateOF(s []int, distance [][]float64) float64 {
+	fmt.Println(s)
+	fmt.Println(len(s))
 	var route float64 = distance[s[len(s)-1]][s[0]]
 	for i := 0; i < len(s)-1; i++ {
 		route += distance[s[i]][s[i+1]]
 	}
 
 	return route
+}
+
+func Unvisited(n int) (unvisited []int) {
+
+	for i := 1; i < n; i++ {
+		unvisited = append(unvisited, i)
+	}
+
+	return unvisited
+}
+
+func InsertPos(v []int, pos int, value int) (solution []int) {
+	solution = append(v[:pos], append([]int{value}, v[pos:]...)...)
+	return solution
 }

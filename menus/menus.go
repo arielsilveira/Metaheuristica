@@ -7,8 +7,8 @@ import (
 	"Metaheuristica/src"
 )
 
-func PrincipalMenu(distance [][]float64, n int) {
-	var s []int
+func PrincipalMenu(distance [][]float64, n int, best_fit_lit float64) {
+	var solution []int
 	options := []interface{}{
 		"Sair",
 		"Gere solucao inicial",
@@ -36,17 +36,19 @@ func PrincipalMenu(distance [][]float64, n int) {
 			fmt.Println("BYE BYE!")
 			return
 		case 1:
-			InitSolution(distance, n, s)
+			solution = InitSolution(distance, n)
 		case 2:
-			fmt.Println("Not Implemented")
+			fo, solution := functions.DescidaBestImprovement(n, solution, distance)
+			src.PrintInfos(solution, distance)
+			fmt.Println("Função Objetivo = ", fo)
 		default:
 			fmt.Println("Not Implemented")
 		}
 	}
 }
 
-func InitSolution(distance [][]float64, n int, s []int) {
-	var alpha float64
+func InitSolution(distance [][]float64, n int) (s []int) {
+	// var alpha float64
 	options := []interface{}{
 		"Voltar",
 		"Gulosa (Vizinho mais proximo)",
@@ -61,15 +63,17 @@ func InitSolution(distance [][]float64, n int, s []int) {
 
 		switch choice {
 		case 0:
-			return
+			return s
 		case 1:
 			s = functions.GreedySolution(n, distance)
 			src.PrintInfos(s, distance)
 		case 2:
-			s := functions.GreedySolutionNeighborNearby(n, distance, alpha)
-			src.PrintInfos(s, distance)
-		case 3:
 			fmt.Println("Not Implemented")
+			// s := functions.GreedySolutionNeighborNearby(n, distance, alpha)
+			// src.PrintInfos(s, distance)
+		case 3:
+			s = functions.CheaperGreedySolution(n, distance)
+			src.PrintInfos(s, distance)
 		case 4:
 			fmt.Println("Not Implemented")
 		case 5:

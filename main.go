@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"Metaheuristica/menus"
 	"Metaheuristica/src"
 )
@@ -21,10 +19,8 @@ func main() {
 
 	n, best_fit_lit = src.ReadFile()
 
-	fmt.Println(best_fit_lit)
 	distance := src.InitializeMatrix(n)
-	fmt.Println(len(distance))
 
-	menus.PrincipalMenu(distance, n)
+	menus.PrincipalMenu(distance, n, best_fit_lit)
 
 }
