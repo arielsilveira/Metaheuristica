@@ -2,11 +2,13 @@ package src
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"math"
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -28,7 +30,7 @@ func stringToInt(s string) int {
 	return int(value)
 }
 
-func readFile() (int, float64) {
+func ReadFile() (int, float64) {
 
 	file, err := os.Open("teste.txt")
 
@@ -53,7 +55,7 @@ func readFile() (int, float64) {
 func createMatrix(n int) [][]float64 {
 	matrix := make([][]float64, n)
 
-	for i := 0; i < n; i++ {
+	for i := range matrix {
 		matrix[i] = make([]float64, n)
 	}
 
@@ -65,7 +67,7 @@ func splitStringToTriple(s string) (int, int, int) {
 	return stringToInt(splitString[0]), stringToInt(splitString[1]), stringToInt(splitString[2])
 }
 
-func initializeMatrix(n int) [][]float64 {
+func InitializeMatrix(n int) [][]float64 {
 	matrix := createMatrix(n)
 	file, err := os.Open("c50.txt")
 
@@ -87,13 +89,76 @@ func initializeMatrix(n int) [][]float64 {
 		vetY[city] = y
 	}
 
-	for i := 0; i < n; i++ {
-		for j := 0; j < n; j++ {
-			valueX := float64(vetX[i] - vetX[j])
-			valueY := float64(vetX[i] - vetX[j])
-			matrix[i][j] = math.Sqrt(math.Pow(valueX, 2) + math.Pow(valueY, 2))
+	var wg sync.WaitGroup
+
+	wg.Add((n - 1) * n / 2)
+	for i := 0; i < n-1; i++ {
+		matrix[i][i] = 0
+		for j := i + 1; j < n; j++ {
+			go func(w *sync.WaitGroup, matrix [][]float64, i int, j int) {
+
+				valueX := float64(vetX[i] - vetX[j])
+				valueY := float64(vetY[i] - vetY[j])
+				matrix[i][j] = math.Sqrt(math.Pow(valueX, 2) + math.Pow(valueY, 2))
+				matrix[j][i] = matrix[i][j]
+				w.Done()
+			}(&wg, matrix, i, j)
 		}
 	}
+	wg.Wait()
 
 	return matrix
+}
+
+func AskOption(question string, options []interface{}) (answer int) {
+
+	fmt.Println(":::::::::: " + strings.ToUpper(question) + " ::::::::::")
+	fmt.Println()
+	for optKey, optVal := range options {
+		fmt.Printf("[%d] %s\n", optKey, optVal)
+	}
+	answer = -1
+	for ok := true; ok; ok = (answer < 0 || answer > len(options)) {
+		fmt.Printf("\n" + "Escolha: ")
+		questionInputScanner := bufio.NewScanner(os.Stdin)
+		for questionInputScanner.Scan() {
+			if answerChosen, err := strconv.Atoi(questionInputScanner.Text()); err == nil {
+				if answerChosen >= 0 && answerChosen < len(options) {
+					answer = answerChosen
+					break
+				}
+			}
+			fmt.Println("Oops. Answer out of range. Try again.")
+			break
+		}
+	}
+	return answer
+}
+
+func RemoveElement(slice []int, s int) []int {
+	return append(slice[:s], slice[s+1:]...)
+}
+
+func printRoute(s []int) {
+	for i := 0; i < len(s); i++ {
+		fmt.Print(s[i], " -> ")
+	}
+	fmt.Println(s[0])
+}
+
+func PrintInfos(s []int, distance [][]float64) {
+	fo := calculateOF(s, distance)
+
+	fmt.Println("Solucao obtida usando a estrategia Best Improvement do Metodo da Descida:")
+	printRoute(s)
+	fmt.Println("Função objetivo = ", fo)
+}
+
+func calculateOF(s []int, distance [][]float64) float64 {
+	var route float64 = distance[s[len(s)-1]][s[0]]
+	for i := 0; i < len(s)-1; i++ {
+		route += distance[s[i]][s[i+1]]
+	}
+
+	return route
 }

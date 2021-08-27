@@ -1,3 +1,3 @@
-module github.com/arielsilveira/Metaheuristica/src
+module Metaheuristica
 
 go 1.16
