@@ -12,9 +12,7 @@ func PrincipalMenu(distance [][]float64, n int, best_fit_lit float64) {
 	options := []interface{}{
 		"Sair",
 		"Gere solucao inicial",
-		"Descida com Best Improvement",
-		"Descida randomica",
-		"Descida com Primeiro de Melhora (First Improvement)",
+		"Método de Descida",
 		"Multi-Start",
 		"Simulated Annealing",
 		"Busca Tabu",
@@ -70,7 +68,6 @@ func InitSolution(distance [][]float64, n int) (s []int) {
 			s = functions.GreedySolution(n, distance)
 			src.PrintInfos(s, distance)
 		case 2:
-			// fmt.Println("Not Implemented")
 			s := functions.GreedySolutionNeighborNearby(n, distance, alpha)
 			src.PrintInfos(s, distance)
 		case 3:
@@ -87,8 +84,9 @@ func InitSolution(distance [][]float64, n int) (s []int) {
 func BestImprovement(n int, distance [][]float64, solution []int) {
 	options := []interface{}{
 		"Voltar",
-		"Aleatório",
-		"Melhor vizinho",
+		"Descida com Best Improvement",
+		"Descida randomica",
+		"Descida com Primeiro de Melhora (First Improvement)",
 	}
 
 	for {
@@ -104,6 +102,9 @@ func BestImprovement(n int, distance [][]float64, solution []int) {
 			fo, solution := functions.DescentBestImprovement(n, solution, distance, functions.BestNeighbor)
 			src.PrintInfos(solution, distance)
 			fmt.Println("Função Objetivo = ", fo)
+		case 3:
+			fmt.Println("Not Implemented")
 		}
+
 	}
 }
