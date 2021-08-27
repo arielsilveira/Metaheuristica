@@ -1,6 +1,7 @@
 package functions
 
 import (
+	"fmt"
 	"math"
 	"math/rand"
 	"sort"
@@ -33,48 +34,36 @@ func GreedySolution(n int, distance [][]float64) (solution []int) {
 	return solution
 }
 
-type order struct {
-	d         [][]float64
-	index     int
-	unvisited []int
-}
-
 func GreedySolutionNeighborNearby(n int, distance [][]float64, alpha float64) (solution []int) {
 	var length int
 	unvisited := src.Unvisited(n)
 
-	var o order
-	o.d = distance
-	o.index = 0
-
 	solution = append(solution, 0)
-	j := 1
-	var choiceCity int
 
-	for j < n {
+	var choiceCity int = 0
+
+	sort.SliceStable(unvisited, func(i, j int) bool {
+		return distance[choiceCity][unvisited[i]] < distance[choiceCity][unvisited[j]]
+	})
+
+	fmt.Println(unvisited)
+
+	for j := 1; j < n; j++ {
 		length = len(unvisited)
 		lengthLRC := math.Max(1, alpha*float64(length))
-
 		pos := rand.Intn(int(lengthLRC))
 
 		choiceCity = unvisited[pos]
 
 		solution = append(solution, choiceCity)
 
-		src.RemoveElement(unvisited, pos)
+		unvisited = src.RemoveElement(unvisited, pos)
 
 		sort.Ints(unvisited)
-		// ordena
-		o.index = choiceCity
-		o.unvisited = unvisited
 
-		// ordem.index = cidade_escolhida; //atualiza ultima cidade inserida
-		// sort(nao_visitadas.begin(), nao_visitadas.end());  //ordena pelos indices (para manter a estabilidade)
-		// stable_sort(nao_visitadas.begin(), nao_visitadas.end(), ordem); //ordena pelas distancias
-
-		unvisited = o.unvisited
-
-		j++
+		sort.SliceStable(unvisited, func(i, j int) bool {
+			return distance[choiceCity][unvisited[i]] < distance[choiceCity][unvisited[j]]
+		})
 	}
 
 	return solution

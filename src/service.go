@@ -155,8 +155,6 @@ func PrintInfos(s []int, distance [][]float64) {
 }
 
 func CalculateOF(s []int, distance [][]float64) float64 {
-	fmt.Println(s)
-	fmt.Println(len(s))
 	var route float64 = distance[s[len(s)-1]][s[0]]
 	for i := 0; i < len(s)-1; i++ {
 		route += distance[s[i]][s[i+1]]
@@ -174,7 +172,6 @@ func Unvisited(n int) (unvisited []int) {
 	return unvisited
 }
 
-func InsertPos(v []int, pos int, value int) (solution []int) {
-	solution = append(v[:pos], append([]int{value}, v[pos:]...)...)
-	return solution
+func InsertPos(v []int, pos int, value int) []int {
+	return append(v[:pos], append([]int{value}, v[pos:]...)...)
 }

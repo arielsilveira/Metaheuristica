@@ -2,7 +2,6 @@ package functions
 
 import (
 	"Metaheuristica/src"
-	"fmt"
 	"math/rand"
 )
 
@@ -75,23 +74,19 @@ func RandomNeighbor(n int, solution []int, distance [][]float64, fo float64, bes
 	return fo - delta1 + delta2, bestI, bestJ
 }
 
-func DescidaBestImprovement(n int, solution []int, distance [][]float64) (float64, []int) {
+type Neighbor func(n int, solution []int, distance [][]float64, fo float64, bestI int, bestJ int) (float64, int, int)
+
+func DescentBestImprovement(n int, solution []int, distance [][]float64, neighbor Neighbor) (float64, []int) {
 	var ibest, jbest int
 	var fo_viz, fo float64
 	flag := true
 	iter := 0
-	fmt.Println("oi")
 	fo = src.CalculateOF(solution, distance)
-	fmt.Println("tchau")
 	fo_viz = fo
-	fmt.Println(solution)
-	fmt.Println(fo, fo_viz)
 
 	for flag {
 		flag = false
-		// fo_viz, ibest, jbest = BestNeighbor(n, solution, distance, fo, ibest, jbest)
-		fo_viz, ibest, jbest = RandomNeighbor(n, solution, distance, fo, ibest, jbest)
-		fmt.Println(fo_viz, ibest, jbest)
+		fo_viz, ibest, jbest = neighbor(n, solution, distance, fo, ibest, jbest)
 
 		if fo_viz < fo {
 			iter++
