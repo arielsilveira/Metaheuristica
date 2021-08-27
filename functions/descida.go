@@ -54,7 +54,7 @@ func BestNeighbor(n int, solution []int, distance [][]float64, fo float64, bestI
 	return bestNeighbor, bestI, bestJ
 }
 
-func RandomNeighbor(n int, solution []int, distance [][]float64, fo float64, bestI int, bestJ int) (float64, int, int) {
+func randomNeighbor(n int, solution []int, distance [][]float64, fo float64, bestI int, bestJ int) (float64, int, int) {
 	var delta1, delta2 float64
 
 	j := rand.Intn(n)
@@ -74,9 +74,7 @@ func RandomNeighbor(n int, solution []int, distance [][]float64, fo float64, bes
 	return fo - delta1 + delta2, bestI, bestJ
 }
 
-type Neighbor func(n int, solution []int, distance [][]float64, fo float64, bestI int, bestJ int) (float64, int, int)
-
-func DescentBestImprovement(n int, solution []int, distance [][]float64, neighbor Neighbor) (float64, []int) {
+func DescentBestImprovement(n int, solution []int, distance [][]float64) (float64, []int) {
 	var ibest, jbest int
 	var fo_viz, fo float64
 	flag := true
@@ -86,13 +84,35 @@ func DescentBestImprovement(n int, solution []int, distance [][]float64, neighbo
 
 	for flag {
 		flag = false
-		fo_viz, ibest, jbest = neighbor(n, solution, distance, fo, ibest, jbest)
+		fo_viz, ibest, jbest = BestNeighbor(n, solution, distance, fo, ibest, jbest)
 
 		if fo_viz < fo {
 			iter++
 			solution[ibest], solution[jbest] = solution[jbest], solution[ibest]
 			fo = fo_viz
 			flag = true
+		}
+	}
+
+	return fo, solution
+
+}
+
+func DescentRandomImprovement(n int, solution []int, distance [][]float64, iterMax int) (float64, []int) {
+	var ibest, jbest int
+	var fo_viz, fo float64
+	iter := 0
+	fo = src.CalculateOF(solution, distance)
+	fo_viz = fo
+
+	for iter < iterMax {
+		iter++
+		fo_viz, ibest, jbest = randomNeighbor(n, solution, distance, fo, ibest, jbest)
+
+		if fo_viz < fo {
+			iter = 0
+			fo = fo_viz
+			solution[ibest], solution[jbest] = solution[jbest], solution[ibest]
 		}
 	}
 

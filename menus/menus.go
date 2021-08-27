@@ -82,6 +82,7 @@ func InitSolution(distance [][]float64, n int) (s []int) {
 }
 
 func BestImprovement(n int, distance [][]float64, solution []int) {
+	var iterMax int = 1000
 	options := []interface{}{
 		"Voltar",
 		"Descida com Best Improvement",
@@ -95,13 +96,19 @@ func BestImprovement(n int, distance [][]float64, solution []int) {
 		case 0:
 			return
 		case 1:
-			fo, solution := functions.DescentBestImprovement(n, solution, distance, functions.RandomNeighbor)
+			start := src.GetTime()
+			fo, solution := functions.DescentBestImprovement(n, solution, distance)
+			end := src.GetTime()
 			src.PrintInfos(solution, distance)
 			fmt.Println("Função Objetivo = ", fo)
+			fmt.Println("Tempo de execução = ", src.CalculatedTime(start, end))
 		case 2:
-			fo, solution := functions.DescentBestImprovement(n, solution, distance, functions.BestNeighbor)
+			start := src.GetTime()
+			fo, solution := functions.DescentRandomImprovement(n, solution, distance, iterMax)
+			end := src.GetTime()
 			src.PrintInfos(solution, distance)
 			fmt.Println("Função Objetivo = ", fo)
+			fmt.Println("Tempo de execução = ", src.CalculatedTime(start, end))
 		case 3:
 			fmt.Println("Not Implemented")
 		}
