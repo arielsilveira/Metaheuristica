@@ -32,7 +32,7 @@ func stringToInt(s string) int {
 
 func ReadFile() (int, float64) {
 
-	file, err := os.Open("teste.txt")
+	file, err := os.Open("data/c50infos.txt")
 
 	if err != nil {
 		log.Fatal(err)
@@ -69,7 +69,7 @@ func splitStringToTriple(s string) (int, int, int) {
 
 func InitializeMatrix(n int) [][]float64 {
 	matrix := createMatrix(n)
-	file, err := os.Open("c50.txt")
+	file, err := os.Open("data/c50.txt")
 
 	if err != nil {
 		log.Fatal(err)
