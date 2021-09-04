@@ -2,6 +2,6 @@ package src
 
 const (
 	QUESTION    string = "Escolha uma das opções:"
-	SOLUTION    string = "Geracao da Solucao Inicial"
-	IMPROVEMENT string = "Seleciona o método de vizinhança"
+	SOLUTION    string = "Geracao da Solução Inicial"
+	IMPROVEMENT string = "Seleciona o método de descida"
 )

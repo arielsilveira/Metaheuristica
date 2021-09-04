@@ -41,6 +41,10 @@ func PrincipalMenu(distance [][]float64, n int, best_fit_lit float64) {
 				break
 			}
 			BestImprovement(n, distance, solution)
+		case 3:
+			s, fo := functions.MultiStart(n, solution, distance)
+			fmt.Println(s)
+			fmt.Println(fo)
 		default:
 			fmt.Println("Not Implemented")
 		}
@@ -76,7 +80,8 @@ func InitSolution(distance [][]float64, n int) (s []int) {
 		case 4:
 			fmt.Println("Not Implemented")
 		case 5:
-			fmt.Println("Not Implemented")
+			s = functions.RandomConstruction(n)
+			src.PrintInfos(s, distance)
 		}
 	}
 }

@@ -119,3 +119,61 @@ func DescentRandomImprovement(n int, solution []int, distance [][]float64, iterM
 	return fo, solution
 
 }
+
+func NeighborFirstImprovement(n int, s []int, distance [][]float64, fo float64, best_i int, best_j int) (float64, []int, int, int) {
+	best_fo := fo
+	best := false
+
+	vet := RandomConstruction(n)
+
+	for i := 0; i < n && best; i++ {
+		for j := 0; j < n && best; j++ {
+			aux_i := vet[i]
+			aux_j := vet[j]
+
+			d1 := DeltaCalculated(n, distance, s, aux_i, aux_j)
+
+			s[aux_i], s[aux_j] = s[aux_j], s[aux_i]
+
+			d2 := DeltaCalculated(n, distance, s, aux_i, aux_j)
+
+			s[aux_i], s[aux_j] = s[aux_j], s[aux_i]
+
+			fo = fo - d1 + d2
+
+			if fo < best_fo {
+				best_fo = fo
+				best_i = aux_i
+				best_j = aux_j
+				best = false
+			}
+
+		}
+	}
+
+	return fo, s, best_i, best_j
+}
+
+func DescentFirstImprovement(n int, solution []int, distance [][]float64) (float64, []int) {
+	var best bool = false
+	var iter int = 0
+	var best_i int = 0
+	var best_j int = 0
+
+	fo := src.CalculateOF(solution, distance)
+	fo_neighbor := fo
+
+	for !best && iter < 500 {
+		fo_neighbor, solution, best_i, best_j = NeighborFirstImprovement(n, solution, distance, fo, best_i, best_j)
+
+		if fo_neighbor < fo {
+			solution[best_i], solution[best_j] = solution[best_j], solution[best_i]
+			fo = fo_neighbor
+			best = true
+		}
+
+		iter++
+	}
+
+	return fo, solution
+}

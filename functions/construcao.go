@@ -5,6 +5,7 @@ import (
 	"math"
 	"math/rand"
 	"sort"
+	"time"
 
 	"Metaheuristica/src"
 )
@@ -128,6 +129,19 @@ func CheaperGreedySolution(n int, distance [][]float64) (solution []int) {
 
 		j++
 	}
+
+	return solution
+}
+
+func RandomConstruction(n int) (solution []int) {
+	for i := 0; i < n; i++ {
+		solution = append(solution, i)
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(n, func(i, j int) {
+		solution[i], solution[j] = solution[j], solution[i]
+	})
 
 	return solution
 }
