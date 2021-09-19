@@ -45,6 +45,12 @@ func PrincipalMenu(distance [][]float64, n int, best_fit_lit float64) {
 			s, fo := functions.MultiStart(n, solution, distance)
 			fmt.Println(s)
 			fmt.Println(fo)
+		case 4:
+			temp := functions.InitialTemp(n, solution, distance, 2, 0.95, 4*n, 10)
+			fmt.Println(temp)
+			s, fo := functions.SA(n, solution, distance, 0.98, 20*n, temp, 0.01)
+			fmt.Println(s)
+			fmt.Println(fo)
 		default:
 			fmt.Println("Not Implemented")
 		}

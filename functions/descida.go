@@ -54,7 +54,7 @@ func BestNeighbor(n int, solution []int, distance [][]float64, fo float64, bestI
 	return bestNeighbor, bestI, bestJ
 }
 
-func randomNeighbor(n int, solution []int, distance [][]float64, fo float64, bestI int, bestJ int) (float64, int, int) {
+func RandomNeighbor(n int, solution []int, distance [][]float64, fo float64, best_i int, best_j int) (float64, int, int) {
 	var delta1, delta2 float64
 
 	j := rand.Intn(n)
@@ -68,10 +68,10 @@ func randomNeighbor(n int, solution []int, distance [][]float64, fo float64, bes
 	delta2 = DeltaCalculated(n, distance, solution, i, j)
 	solution[i], solution[j] = solution[j], solution[i]
 
-	bestI = i
-	bestJ = j
+	best_i = i
+	best_j = j
 
-	return fo - delta1 + delta2, bestI, bestJ
+	return fo - delta1 + delta2, best_i, best_j
 }
 
 func DescentBestImprovement(n int, solution []int, distance [][]float64) (float64, []int) {
@@ -107,7 +107,7 @@ func DescentRandomImprovement(n int, solution []int, distance [][]float64, iterM
 
 	for iter < iterMax {
 		iter++
-		fo_viz, ibest, jbest = randomNeighbor(n, solution, distance, fo, ibest, jbest)
+		fo_viz, ibest, jbest = RandomNeighbor(n, solution, distance, fo, ibest, jbest)
 
 		if fo_viz < fo {
 			iter = 0
