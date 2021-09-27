@@ -15,9 +15,9 @@ func PrincipalMenu(distance [][]float64, n int, best_fit_lit float64) {
 		"Método de Descida",
 		"Multi-Start",
 		"Simulated Annealing",
+		"GRASP",
 		"Busca Tabu",
 		"ILS",
-		"GRASP",
 		"VND",
 		"VNS",
 		"Algoritmos Geneticos",
@@ -51,6 +51,11 @@ func PrincipalMenu(distance [][]float64, n int, best_fit_lit float64) {
 			s, fo := functions.SA(n, solution, distance, 0.98, 20*n, temp, 0.01)
 			fmt.Println(s)
 			fmt.Println(fo)
+		case 5:
+			GraspSolution(n, solution, distance)
+			// s, fo := functions.Grasp(n, solution, distance, 0.05, 50)
+			// fmt.Println(s)
+			// fmt.Println(fo)
 		default:
 			fmt.Println("Not Implemented")
 		}
@@ -122,6 +127,37 @@ func BestImprovement(n int, distance [][]float64, solution []int) {
 			fmt.Println("Tempo de execução = ", src.CalculatedTime(start, end))
 		case 3:
 			fmt.Println("Not Implemented")
+		}
+
+	}
+}
+
+func GraspSolution(n int, solution []int, distance [][]float64) {
+	options := []interface{}{
+		"Voltar",
+		"Parcialmente gulosa (Vizinho mais proximo)",
+		"Parcialmente gulosa (Insercao Mais Barata)",
+	}
+
+	for {
+		choice := src.AskOption(src.DESCENT, options)
+		switch choice {
+		case 0:
+			return
+		case 1:
+			start := src.GetTime()
+			s, fo := functions.Grasp(n, solution, distance, 0.05, 50, functions.GreedySolutionNeighborNearby)
+			end := src.GetTime()
+			fmt.Println(s)
+			fmt.Println(fo)
+			fmt.Println("Tempo de execução = ", src.CalculatedTime(start, end))
+		case 2:
+			start := src.GetTime()
+			s, fo := functions.Grasp(n, solution, distance, 0.05, 50, functions.PartiallyGreedyWithCheaperInsert)
+			end := src.GetTime()
+			fmt.Println(s)
+			fmt.Println(fo)
+			fmt.Println("Tempo de execução = ", src.CalculatedTime(start, end))
 		}
 
 	}

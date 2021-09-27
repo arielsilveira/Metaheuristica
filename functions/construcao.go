@@ -1,7 +1,6 @@
 package functions
 
 import (
-	"fmt"
 	"math"
 	"math/rand"
 	"sort"
@@ -10,6 +9,7 @@ import (
 	"Metaheuristica/src"
 )
 
+// constroi_solucao_gulosa_vizinho_mais_proximo
 func GreedySolution(n int, distance [][]float64) (solution []int) {
 	var next int
 	unvisited := src.Unvisited(n)
@@ -35,6 +35,7 @@ func GreedySolution(n int, distance [][]float64) (solution []int) {
 	return solution
 }
 
+// constroi_solucao_parcialmente_gulosa_vizinho_mais_proximo
 func GreedySolutionNeighborNearby(n int, distance [][]float64, alpha float64) (solution []int) {
 	var length int
 	unvisited := src.Unvisited(n)
@@ -46,8 +47,6 @@ func GreedySolutionNeighborNearby(n int, distance [][]float64, alpha float64) (s
 	sort.SliceStable(unvisited, func(i, j int) bool {
 		return distance[choiceCity][unvisited[i]] < distance[choiceCity][unvisited[j]]
 	})
-
-	fmt.Println(unvisited)
 
 	for j := 1; j < n; j++ {
 		length = len(unvisited)
@@ -70,6 +69,7 @@ func GreedySolutionNeighborNearby(n int, distance [][]float64, alpha float64) (s
 	return solution
 }
 
+// constroi_solucao_gulosa_insercao_mais_barata
 func CheaperGreedySolution(n int, distance [][]float64) (solution []int) {
 	unvisited := src.Unvisited(n)
 
@@ -133,6 +133,7 @@ func CheaperGreedySolution(n int, distance [][]float64) (solution []int) {
 	return solution
 }
 
+// constroi_solucao_aleatoria
 func RandomConstruction(n int) (solution []int) {
 	for i := 0; i < n; i++ {
 		solution = append(solution, i)
@@ -142,6 +143,42 @@ func RandomConstruction(n int) (solution []int) {
 	rand.Shuffle(n, func(i, j int) {
 		solution[i], solution[j] = solution[j], solution[i]
 	})
+
+	return solution
+}
+
+// constroi_solucao_parcialmente_gulosa_insercao_mais_barata
+func PartiallyGreedyWithCheaperInsert(n int, distance [][]float64, alpha float64) (solution []int) {
+	var gMin, gMax float64
+	unvisited := src.Unvisited(n)
+
+	solution = append(solution, 0)
+
+	var choiceCity int = 0
+	for i := 1; i < n; i++ {
+		var lrc []int
+		sort.SliceStable(unvisited, func(i, j int) bool {
+			return distance[choiceCity][unvisited[i]] < distance[choiceCity][unvisited[j]]
+		})
+		gMin = distance[choiceCity][unvisited[0]]
+		gMax = distance[choiceCity][unvisited[len(unvisited)-1]]
+
+		value := gMin + alpha*(gMax-gMin)
+		for j := 0; j < len(unvisited); j++ {
+			if distance[choiceCity][unvisited[j]] > value {
+				break
+			}
+			lrc = append(lrc, unvisited[j])
+		}
+
+		pos := rand.Intn(len(lrc))
+
+		choiceCity = unvisited[pos]
+
+		solution = append(solution, choiceCity)
+
+		unvisited = src.RemoveElement(unvisited, pos)
+	}
 
 	return solution
 }
