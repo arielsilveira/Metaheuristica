@@ -54,6 +54,10 @@ func PrincipalMenu(distance [][]float64, n int, best_fit_lit float64) {
 		case 5:
 			GraspSolution(n, solution, distance)
 		case 6:
+			if len(solution) == 0 {
+				fmt.Print("\n\n#### É necessario gerar a solução inicial. ####\n\n")
+				break
+			}
 			s, fo := functions.BT(n, solution, distance, 11, 500)
 			fmt.Println(fo)
 			fmt.Println(s)
