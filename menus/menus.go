@@ -61,6 +61,12 @@ func PrincipalMenu(distance [][]float64, n int, best_fit_lit float64) {
 			s, fo := functions.BT(n, solution, distance, 11, 500)
 			fmt.Println(fo)
 			fmt.Println(s)
+		case 7:
+			if len(solution) == 0 {
+				fmt.Print("\n\n#### É necessario gerar a solução inicial. ####\n\n")
+				break
+			}
+			ILSSolution(n, solution, distance)
 		default:
 			fmt.Println("Not Implemented")
 		}
@@ -165,5 +171,30 @@ func GraspSolution(n int, solution []int, distance [][]float64) {
 			fmt.Println("Tempo de execução = ", src.CalculatedTime(start, end))
 		}
 
+	}
+}
+
+func ILSSolution(n int, solution []int, distance [][]float64) {
+	options := []interface{}{
+		"Voltar",
+		"ILS",
+		"Smart ILS",
+	}
+
+	for {
+		choice := src.AskOption(src.ILS, options)
+		switch choice {
+		case 1:
+			fo, s := functions.ILS(n, solution, distance, 50, 500)
+			fmt.Println(fo)
+			fmt.Println(s)
+		case 2:
+			fo, s := functions.SmartILS(n, solution, distance, 50, 500, 1000)
+			fmt.Println(fo)
+			fmt.Println(s)
+		default:
+			fmt.Println("Not Implemented")
+
+		}
 	}
 }

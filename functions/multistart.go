@@ -1,7 +1,6 @@
 package functions
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -21,7 +20,6 @@ func MultiStart(n int, s []int, distance [][]float64) (s_star []int, fo_star flo
 			s_star = s
 			fo_star = fo
 			iter = 0
-			fmt.Println("Função objetivo: ", fo_star)
 		}
 		iter++
 	}
