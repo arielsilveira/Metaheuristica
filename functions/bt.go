@@ -13,8 +13,9 @@ func BT(n int, solution []int, distance [][]float64, list_size int, bt_max int) 
 	s_star = solution
 	fo = src.CalculateOF(solution, distance)
 	fo_star = fo
+
 	for iter_bt := 0; iter_bt < bt_max; iter_bt++ {
-		fo_vizinho, best_i, best_j := BestNeighborBT(n, solution, distance, fo, best_i, best_j, fo_star)
+		fo_vizinho, best_i, best_j := BestNeighborBT(n, solution, distance, fo, best_i, best_j, fo_star, iter_bt, tabu_list)
 
 		tabu_list[best_i][best_j] = float64(iter_bt + list_size)
 
@@ -29,5 +30,4 @@ func BT(n int, solution []int, distance [][]float64, list_size int, bt_max int) 
 	}
 
 	return s_star, fo_star
-
 }

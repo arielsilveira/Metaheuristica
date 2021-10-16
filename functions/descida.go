@@ -179,7 +179,7 @@ func DescentFirstImprovement(n int, solution []int, distance [][]float64) (float
 	return fo, solution
 }
 
-func BestNeighborBT(n int, solution []int, distance [][]float64, fo float64, best_i int, best_j int, fo_star float64) (float64, int, int) {
+func BestNeighborBT(n int, solution []int, distance [][]float64, fo float64, best_i int, best_j int, fo_star float64, atual_iter int, tabu_list [][]float64) (float64, int, int) {
 	fo_melhor_viz := math.MaxFloat64
 
 	for i := 0; i < n-1; i++ {
@@ -192,10 +192,18 @@ func BestNeighborBT(n int, solution []int, distance [][]float64, fo float64, bes
 
 			fo_viz := fo - delta1 + delta2
 
-			if fo_viz < fo_melhor_viz || fo_viz < fo_star {
-				best_i = i
-				best_j = j
-				fo_melhor_viz = fo_viz
+			if tabu_list[i][j] < float64(atual_iter) {
+				if fo_viz < fo_melhor_viz {
+					best_i = i
+					best_j = j
+					fo_melhor_viz = fo_viz
+				}
+			} else {
+				if fo_viz < fo_star {
+					best_i = i
+					best_j = j
+					fo_melhor_viz = fo_viz
+				}
 			}
 
 			solution[i], solution[j] = solution[j], solution[i]
