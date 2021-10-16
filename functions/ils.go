@@ -5,11 +5,11 @@ import (
 	"math/rand"
 )
 
-func perturbacao(n int, solution []int, distance [][]float64, fo float64, nivel int) (float64, []int) {
-	ntrocasMax := nivel + 1
+func perturbation(n int, solution []int, distance [][]float64, fo float64, nivel int) (float64, []int) {
+	n_swap_max := nivel + 1
 	var i, j int
 
-	for ntrocas := 0; ntrocas < ntrocasMax; ntrocas++ {
+	for n_swap := 0; n_swap < n_swap_max; n_swap++ {
 		i = rand.Intn(n)
 		j = rand.Intn(n)
 		for i == j {
@@ -25,49 +25,48 @@ func perturbacao(n int, solution []int, distance [][]float64, fo float64, nivel 
 	return fo, solution
 }
 
-func ILS(n int, solution []int, distance [][]float64, nivel int, ILSmax int) (float64, []int) {
-	var fo float64
-	var best_iter int
-	fo = src.CalculateOF(solution, distance)
+func ILS(n int, solution []int, distance [][]float64, level int, ils_max int) (float64, []int) {
+	fo := src.CalculateOF(solution, distance)
+	best_iter := 0
 
-	for iter := 0; iter-best_iter < ILSmax; iter++ {
-		_, s := perturbacao(n, solution, distance, fo, nivel)
+	for iter := 0; iter-best_iter < ils_max; iter++ {
+		_, s := perturbation(n, solution, distance, fo, level)
 		fo_star, s_star := DescentBestImprovement(n, s, distance)
 
 		if fo_star < fo {
 			solution = s_star
 			fo = fo_star
 			best_iter = iter
-			nivel = 1
+			level = 1
 		} else {
-			nivel++
+			level++
 		}
 	}
 
 	return fo, solution
 }
 
-func SmartILS(n int, solution []int, distance [][]float64, nivel int, nVezesNivel int, ILSMax int) (float64, []int) {
-	var fo float64
-	var best_iter int
-	fo = src.CalculateOF(solution, distance)
-	vezesMax := 1
-	for iter := 0; iter-best_iter < ILSMax; iter++ {
-		_, s := perturbacao(n, solution, distance, fo, nivel)
+func SmartILS(n int, solution []int, distance [][]float64, level int, level_occurrence int, ils_max int) (float64, []int) {
+	fo := src.CalculateOF(solution, distance)
+	max_occurrence := 1
+	best_iter := 0
+
+	for iter := 0; iter-best_iter < ils_max; iter++ {
+		_, s := perturbation(n, solution, distance, fo, level)
 		fo_star, s_star := DescentBestImprovement(n, s, distance)
 
 		if fo_star < fo {
 			solution = s_star
 			fo = fo_star
 			best_iter = iter
-			nivel = 1
-			nVezesNivel = 1
+			level = 1
+			level_occurrence = 1
 		} else {
-			if nVezesNivel >= vezesMax {
-				nivel++
-				nVezesNivel = 1
+			if level_occurrence >= max_occurrence {
+				level++
+				level_occurrence = 1
 			} else {
-				nVezesNivel++
+				level_occurrence++
 			}
 		}
 	}
