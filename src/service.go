@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func createMatrix(n int) [][]float64 {
+func CreateMatrix(n int) [][]float64 {
 	matrix := make([][]float64, n)
 
 	for i := range matrix {
@@ -91,7 +91,7 @@ func InsertPos(v []int, pos int, value int) []int {
 }
 
 func InitializeMatrix(n int) [][]float64 {
-	matrix := createMatrix(n)
+	matrix := CreateMatrix(n)
 	file, err := os.Open("data/c50.txt")
 
 	if err != nil {

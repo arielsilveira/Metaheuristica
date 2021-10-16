@@ -53,9 +53,10 @@ func PrincipalMenu(distance [][]float64, n int, best_fit_lit float64) {
 			fmt.Println(fo)
 		case 5:
 			GraspSolution(n, solution, distance)
-			// s, fo := functions.Grasp(n, solution, distance, 0.05, 50)
-			// fmt.Println(s)
-			// fmt.Println(fo)
+		case 6:
+			s, fo := functions.BT(n, solution, distance, 11, 500)
+			fmt.Println(fo)
+			fmt.Println(s)
 		default:
 			fmt.Println("Not Implemented")
 		}

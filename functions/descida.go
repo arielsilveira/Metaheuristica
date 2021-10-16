@@ -2,6 +2,7 @@ package functions
 
 import (
 	"Metaheuristica/src"
+	"math"
 	"math/rand"
 )
 
@@ -176,4 +177,29 @@ func DescentFirstImprovement(n int, solution []int, distance [][]float64) (float
 	}
 
 	return fo, solution
+}
+
+func BestNeighborBT(n int, solution []int, distance [][]float64, fo float64, best_i int, best_j int, fo_star float64) (float64, int, int) {
+	fo_melhor_viz := math.MaxFloat64
+
+	for i := 0; i < n-1; i++ {
+		for j := i + 1; j < n; j++ {
+			delta1 := DeltaCalculated(n, distance, solution, i, j)
+
+			solution[i], solution[j] = solution[j], solution[i]
+
+			delta2 := DeltaCalculated(n, distance, solution, i, j)
+
+			fo_viz := fo - delta1 + delta2
+
+			if fo_viz < fo_melhor_viz || fo_viz < fo_star {
+				best_i = i
+				best_j = j
+				fo_melhor_viz = fo_viz
+			}
+
+			solution[i], solution[j] = solution[j], solution[i]
+		}
+	}
+	return fo_melhor_viz, best_i, best_j
 }
