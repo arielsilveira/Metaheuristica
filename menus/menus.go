@@ -67,6 +67,12 @@ func PrincipalMenu(distance [][]float64, n int, best_fit_lit float64) {
 				break
 			}
 			ILSSolution(n, solution, distance)
+		case 9:
+			fo, s := functions.VNS(n, solution, distance, 500, 2)
+			fmt.Println(fo)
+			fmt.Println(s)
+		case 10:
+
 		default:
 			fmt.Println("Not Implemented")
 		}
